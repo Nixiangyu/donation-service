@@ -43,7 +43,7 @@ func (h *RestHandler) Upload(c *gin.Context) {
 	c.JSON(http.StatusOK, rest.SuccessResponse(&structs.ImageUploadResp{
 		ID: imageFileTag,
 	}))
-
+	fmt.Println("hahhahahhah")
 	logger.Info("response image upload success.")
 	return
 }
