@@ -57,8 +57,9 @@ const (
 	urlOrgCharitiesDetail = "org/charities/detail"
 
 	// image
-	urlImageUpload = "image/upload"
-	urlImageDraw   = "image/draw"
+	urlImageUpload   = "image/upload"
+	urlImageDraw     = "image/draw"
+	urlImageDownload = "image/download"
 )
 
 // Router service router
@@ -158,6 +159,7 @@ func (r *Router) SetupRouter() *gin.Engine {
 		// image
 		apiPrefix.POST(urlImageUpload, r.imageHandler.Upload)
 		apiPrefix.GET(urlImageDraw, r.imageHandler.Draw)
+		apiPrefix.GET(urlImageDownload, r.imageHandler.Download)
 	}
 	return router
 }

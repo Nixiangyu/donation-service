@@ -33,6 +33,21 @@ func (m *MockIALiYunBackend) EXPECT() *MockIALiYunBackendMockRecorder {
 	return m.recorder
 }
 
+// DownloadObject mocks base method
+func (m *MockIALiYunBackend) DownloadObject(arg0 string) (io.Reader, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DownloadObject", arg0)
+	ret0, _ := ret[0].(io.Reader)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DownloadObject indicates an expected call of DownloadObject
+func (mr *MockIALiYunBackendMockRecorder) DownloadObject(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DownloadObject", reflect.TypeOf((*MockIALiYunBackend)(nil).DownloadObject), arg0)
+}
+
 // IsExist mocks base method
 func (m *MockIALiYunBackend) IsExist(arg0 string) (bool, error) {
 	m.ctrl.T.Helper()

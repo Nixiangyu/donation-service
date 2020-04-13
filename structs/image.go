@@ -27,3 +27,13 @@ type DrawResp struct {
 	Content  string `json:"content"`
 	ImageURL string `json:"image_url"`
 }
+
+// DownloadRequest  defines the request of query download
+type DownloadRequest struct {
+	ImageUrl string `form:"image_url"`
+}
+
+// DownloadResponse  defines the response of query download
+type DownloadResponse struct {
+	Image []byte `json:"image"`
+}

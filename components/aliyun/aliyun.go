@@ -52,3 +52,8 @@ func (c *Client) UploadObject(name string, content io.Reader) (err error) {
 func (c *Client) IsExist(name string) (bool, error) {
 	return c.Bucket.IsObjectExist(name, c.Options...)
 }
+
+// DownloadObject implement image download interface
+func (c *Client) DownloadObject(url string) (reader *oss.GetObjectResult, err error) {
+	return c.Bucket.DoGetObjectWithURL(url, c.Options)
+}

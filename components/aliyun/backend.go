@@ -8,6 +8,8 @@ package aliyun
 
 import (
 	"io"
+
+	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 )
 
 //go:generate mockgen -destination=mock_backend/mock_backend.go -package=mock_backend github.com/csiabb/donation-service/components/aliyun IALiYunBackend
@@ -16,4 +18,5 @@ import (
 type IALiYunBackend interface {
 	IsExist(name string) (bool, error)
 	UploadObject(name string, content io.Reader) error
+	DownloadObject(url string) (*oss.GetObjectResult, error)
 }

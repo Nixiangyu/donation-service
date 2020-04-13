@@ -7,7 +7,9 @@ SPDX-License-Identifier: Apache-2.0
 package image
 
 import (
+	"errors"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/csiabb/donation-service/common/rest"
@@ -68,7 +70,7 @@ func (h *RestHandler) Draw(c *gin.Context) {
 		if imagURL, err = h.GetImageURL(req); err != nil {
 			e := fmt.Errorf("get image url err : %s", err.Error())
 			logger.Error(e)
-			c.JSON(http.StatusBadRequest, rest.ErrorResponse(rest.ParseRequestParamsError, e.Error()))
+			c.JSON(http.StatusBadRequest, rest.ErrorResponse(rest.InternalServerFailure, e.Error()))
 			return
 		}
 	} else {
@@ -86,4 +88,40 @@ func (h *RestHandler) Draw(c *gin.Context) {
 	logger.Info("response share success.")
 	return
 
+}
+
+//  Download defines the download of image
+func (h *RestHandler) Download(c *gin.Context) {
+	logger.Info("got image download request")
+	req := &structs.DownloadRequest{}
+	if err := c.Bind(req); err != nil {
+		e := fmt.Errorf("invalid parameters: %s", err.Error())
+		logger.Error(e)
+		c.JSON(http.StatusBadRequest, rest.ErrorResponse(rest.ParseRequestParamsError, e.Error()))
+		return
+	}
+	logger.Debugf("request params, %v", req)
+
+	reader, e := h.srvcContext.ALiYunBackend.DownloadObject(req.ImageUrl)
+	if e != nil {
+		logger.Error(e)
+		c.JSON(http.StatusBadRequest, rest.ErrorResponse(rest.InternalServerFailure, e.Error()))
+		return
+	} else if reader.Response.StatusCode != 200 {
+		e = errors.New("download is failed , code is not equal 200")
+		logger.Error(e)
+		c.JSON(http.StatusBadRequest, rest.ErrorResponse(rest.InternalServerFailure, e.Error()))
+		return
+	}
+
+	res, e := ioutil.ReadAll(reader.Response.Body)
+	if e != nil {
+		logger.Error(e)
+		c.JSON(http.StatusBadRequest, rest.ErrorResponse(rest.InternalServerFailure, e.Error()))
+		return
+	}
+
+	c.Writer.Write(res)
+	logger.Info("response image download success.")
+	return
 }
